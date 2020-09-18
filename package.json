@@ -1,0 +1,20 @@
+{
+	"name": "middlewarizer",
+	"version": "1.0.0",
+	"description": "tackle anything the middleware way",
+	"main": "index.ts",
+	"scripts": {
+		"test": "node_modules/.bin/jest --watchAll"
+	},
+	"author": "Mohammed Shahoe <muyabb@gmail.com>",
+	"license": "ISC",
+	"devDependencies": {
+		"@babel/core": "^7.11.6",
+		"@babel/preset-env": "^7.11.5",
+		"@babel/preset-typescript": "^7.10.4",
+		"@types/jest": "^26.0.14",
+		"@types/node": "^14.11.1",
+		"babel-jest": "^26.3.0",
+		"jest": "^26.4.2"
+	}
+}
