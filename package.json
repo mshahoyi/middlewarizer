@@ -1,6 +1,6 @@
 {
 	"name": "middlewarizer",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "tackle anything the middleware way",
 	"main": "index.ts",
 	"scripts": {
