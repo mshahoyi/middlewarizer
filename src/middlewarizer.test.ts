@@ -1,6 +1,11 @@
 import middlewarizer from "./middlewarizer";
 
 describe("Middlewarizer", () => {
+	beforeEach(() => {
+		console.log = jest.fn();
+		console.warn = jest.fn();
+	});
+
 	test("all input functions are executed with next", async () => {
 		const fn1 = jest.fn((n) => n());
 		const fn2 = jest.fn();
@@ -75,5 +80,35 @@ describe("Middlewarizer", () => {
 		await middlewarizer("arg one")(fn1, fn2)({ errorHandler });
 
 		expect(errorHandler).toHaveBeenCalledWith(error, "arg one");
+	});
+
+	test("middlewarizer returns what the last middleware returns", async () => {
+		const fn1 = jest.fn((n) => n());
+		const fn2 = jest.fn(() => "return Hello");
+
+		const returnValue = await middlewarizer()(fn1, fn2)();
+
+		expect(returnValue).toBe("return Hello");
+	});
+
+	test("has a verbose mode in options on by default which logs to commandline each middleware execution and result", async () => {
+		const fn1 = (n) => n();
+		const fn2 = (n) => n(error);
+		const error = new Error("error");
+
+		await expect(middlewarizer()(fn1, fn2)()).rejects.toThrow();
+
+		expect((console.log as any).mock.calls[0][0]).toBe(
+			"Middlewarizer: Exexuting the 1th middleware 'fn1'..."
+		);
+		expect((console.log as any).mock.calls[1][0]).toBe(
+			"Middlewarizer: Passing wihout error to the next middleware"
+		);
+		expect((console.log as any).mock.calls[2][0]).toBe(
+			"Middlewarizer: Exexuting the 2th middleware 'fn2'..."
+		);
+		expect((console.log as any).mock.calls[3][0]).toBe(
+			"Middlewarizer: Failed to pass middleware 'fn2'. Stopped middleware stack."
+		);
 	});
 });
