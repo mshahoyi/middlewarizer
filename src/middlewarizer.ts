@@ -4,8 +4,10 @@ export interface MiddlewarizerOptions {
 	verbose?: boolean;
 }
 
+export type Next = (error?) => void;
+
 const middlewarizer = function (...args: any[]) {
-	return (...funcs: Array<(next: (error?) => void, ...args) => any>) => async (
+	return (...funcs: Array<(next: Next, ...args) => any>) => async (
 		options?: MiddlewarizerOptions
 	) => {
 		const verbose = (options && options.verbose) || process.env.NODE_ENV !== "production";
@@ -26,7 +28,7 @@ const middlewarizer = function (...args: any[]) {
 					);
 				result = await funcs[i](next, ...args);
 			} catch (e) {
-				return handleError(e, options, verbose, funcs[i].name, ...args);
+				return handleError(e, options || {}, verbose, funcs[i].name, ...args);
 			}
 
 			if (nextCallsNumber === 0) {
@@ -45,7 +47,7 @@ const middlewarizer = function (...args: any[]) {
 				);
 
 			if (typeof nextError !== "undefined")
-				return handleError(nextError, options, verbose, funcs[i].name, ...args);
+				return handleError(nextError, options || {}, verbose, funcs[i].name, ...args);
 
 			if (i === funcs.length - 1) return result;
 			verbose && console.log("Middlewarizer: Passing wihout error to the next middleware");

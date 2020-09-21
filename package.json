@@ -2,9 +2,12 @@
 	"name": "middlewarizer",
 	"version": "1.2.0",
 	"description": "tackle anything the middleware way",
-	"main": "src/index.ts",
+	"main": "dist/index.ts",
+	"types": "dist/index.d.ts",
 	"scripts": {
-		"test": "node_modules/.bin/jest --watchAll"
+		"test": "node_modules/.bin/jest --watchAll",
+		"build": "rm -rf dist && node_modules/.bin/tsc",
+		"prepublish": "npm run build"
 	},
 	"author": "Mohammed Shahoe <muyabb@gmail.com>",
 	"license": "ISC",
@@ -15,6 +18,7 @@
 		"@types/jest": "^26.0.14",
 		"@types/node": "^14.11.1",
 		"babel-jest": "^26.3.0",
-		"jest": "^26.4.2"
+		"jest": "^26.4.2",
+		"typescript": "^4.0.3"
 	}
 }
