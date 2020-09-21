@@ -1,6 +1,6 @@
 {
 	"name": "middlewarizer",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "tackle anything the middleware way",
 	"main": "dist/index.ts",
 	"types": "dist/index.d.ts",
