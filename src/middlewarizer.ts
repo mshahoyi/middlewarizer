@@ -4,7 +4,7 @@ export interface MiddlewarizerOptions {
 	verbose?: boolean;
 }
 
-export type Next = (error?) => void;
+export type Next = (error?) => true;
 
 const middlewarizer = function (...args: any[]) {
 	return (...funcs: Array<(next: Next, ...args) => any>) => async (
@@ -15,9 +15,10 @@ const middlewarizer = function (...args: any[]) {
 		let nextError;
 		let result;
 
-		const next = (error?) => {
+		const next = (error?): true => {
 			nextCallsNumber += 1;
 			nextError = error;
+			return true;
 		};
 
 		for (let i = 0; i < funcs.length; i++) {

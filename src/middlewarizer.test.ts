@@ -111,4 +111,16 @@ describe("Middlewarizer", () => {
 			"Middlewarizer: Failed to pass middleware 'fn2'. Stopped middleware stack."
 		);
 	});
+
+	test("next returns true so that one liner statements can be called inline", async () => {
+		const fn0 = jest.fn();
+		const fn1 = jest.fn((n) => n() && fn0());
+		const fn2 = jest.fn((n) => {});
+
+		await expect(middlewarizer()(fn1, fn2)()).resolves;
+
+		expect(fn0).toHaveBeenCalledTimes(1);
+		expect(fn1).toHaveBeenCalledTimes(1);
+		expect(fn2).toHaveBeenCalledTimes(1);
+	});
 });

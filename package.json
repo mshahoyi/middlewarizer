@@ -7,7 +7,7 @@
 	"scripts": {
 		"test": "node_modules/.bin/jest --watchAll",
 		"build": "rm -rf dist && node_modules/.bin/tsc",
-		"prepublish": "npm run build"
+		"prepare": "npm run build"
 	},
 	"author": "Mohammed Shahoe <muyabb@gmail.com>",
 	"license": "ISC",
