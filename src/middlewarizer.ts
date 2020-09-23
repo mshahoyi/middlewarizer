@@ -2,6 +2,7 @@ export interface MiddlewarizerOptions {
 	errorHandler?: (error: Error, ...args: any[]) => any;
 	muteNoNextCallWarning?: boolean;
 	verbose?: boolean;
+	name?: string;
 }
 
 export type Next = (error?) => true;
@@ -14,6 +15,10 @@ const middlewarizer = function (...args: any[]) {
 		let nextCallsNumber = 0;
 		let nextError;
 		let result;
+		verbose &&
+			options &&
+			typeof name !== undefined &&
+			console.log(`Middlewarizer: About to start the middleware chain '${options.name}'...`);
 
 		const next = (error?): true => {
 			nextCallsNumber += 1;

@@ -1,1 +1,1 @@
-export { default, MiddlewarizerOptions } from "./middlewarizer";
+export { default, MiddlewarizerOptions, Next } from "./middlewarizer";

@@ -123,4 +123,17 @@ describe("Middlewarizer", () => {
 		expect(fn1).toHaveBeenCalledTimes(1);
 		expect(fn2).toHaveBeenCalledTimes(1);
 	});
+
+	test("each middlewarizer can have a name and tells its name in the console log", async () => {
+		const fn0 = jest.fn();
+		const fn1 = jest.fn((n) => n() && fn0());
+		const fn2 = jest.fn((n) => {});
+
+		await expect(middlewarizer()(fn1, fn2)({ name: "TEST" })).resolves;
+
+		expect(console.log).toHaveBeenNthCalledWith(
+			1,
+			"Middlewarizer: About to start the middleware chain 'TEST'..."
+		);
+	});
 });
