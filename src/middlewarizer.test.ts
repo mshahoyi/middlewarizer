@@ -102,13 +102,10 @@ describe("Middlewarizer", () => {
 			"Middlewarizer: Exexuting the 1th middleware 'fn1'..."
 		);
 		expect((console.log as any).mock.calls[1][0]).toBe(
-			"Middlewarizer: Passing wihout error to the next middleware"
-		);
-		expect((console.log as any).mock.calls[2][0]).toBe(
 			"Middlewarizer: Exexuting the 2th middleware 'fn2'..."
 		);
-		expect((console.log as any).mock.calls[3][0]).toBe(
-			"Middlewarizer: Failed to pass middleware 'fn2'. Stopped middleware stack."
+		expect((console.log as any).mock.calls[2][0]).toBe(
+			"Middlewarizer: 👎 Failed to pass middleware 'fn2'. Stopped middleware stack."
 		);
 	});
 
@@ -117,7 +114,7 @@ describe("Middlewarizer", () => {
 		const fn1 = jest.fn((n) => n() && fn0());
 		const fn2 = jest.fn((n) => {});
 
-		await expect(middlewarizer()(fn1, fn2)()).resolves;
+		await expect(middlewarizer()(fn1, fn2)()).resolves.toBeUndefined();
 
 		expect(fn0).toHaveBeenCalledTimes(1);
 		expect(fn1).toHaveBeenCalledTimes(1);
@@ -129,11 +126,23 @@ describe("Middlewarizer", () => {
 		const fn1 = jest.fn((n) => n() && fn0());
 		const fn2 = jest.fn((n) => {});
 
-		await expect(middlewarizer()(fn1, fn2)({ name: "TEST" })).resolves;
+		await expect(middlewarizer()(fn1, fn2)({ name: "TEST" })).resolves.toBeUndefined();
 
 		expect(console.log).toHaveBeenNthCalledWith(
 			1,
 			"Middlewarizer: About to start the middleware chain 'TEST'..."
+		);
+	});
+
+	test("logs to the console upon returning", async () => {
+		const fn0 = jest.fn();
+		const fn1 = jest.fn((n) => n() && fn0());
+		const fn2 = jest.fn(() => "RETURN");
+
+		await expect(middlewarizer()(fn1, fn2)({ name: "TEST" })).resolves.toBe("RETURN");
+
+		expect(console.log).toHaveBeenLastCalledWith(
+			"Middlewarizer: ✅ 'TEST' chain finished execution and returned with 'RETURN'"
 		);
 	});
 });
